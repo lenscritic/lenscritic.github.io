@@ -1,0 +1,60 @@
+<html>
+
+<head>
+<style>
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
+</head>
+
+<body>
+<pre>
+mameGenXml.pl is a perl script that will create the xml for Emulation Station, attempting to populate real game names in place of the often cryptic mame/fba filenames. It will also add references to image files if it finds them in the rom directory. It runs entirely offline which makes it fast. You can use it for console roms as well.
+
+Optional: If you'd like images, I'd suggest using the EmuMovies DSU, which is a free Windows program that will automatically fetch images for your roms within a couple minutes. Just make sure to copy the downloaded images to the appropriate rom directory on your Pi before running mameGenXml.pl
+
+If you've already generated an existing gamelist.xml (using ES-scraper or some similar utility) you might want to back it up before attempting any of this.
+
+Steps:
+
+First, exit Emulation Station (via F4). Trying to modify the xml while Emulation Station is running will create problems.
+
+Let's fetch the script file:
+
+   wget http://webspace.lenscritic.com/mame/mameGenXml.tar.gz
+
+We'll move it into a new direcotry:
+
+   mkdir genScript
+   mv mameGenXml.tar.gz genScript/
+   cd genScript/
+
+Expand the contents:
+
+   tar zxvf mameGenXml.tar.gz
+
+Now run it! We'll send the output to a new file called gamelist.xml. You'll need to pass the full path to the roms, the mode (either "mame", "fba", or "console"), and the rom extension ("zip", "nes", etc).
+
+Here's an example for MAME:
+
+   perl mameGenXml.pl -rompath /home/pi/mame4all/roms/ -mode mame -extension zip > gamelist.xml
+
+Here's an example for FBA:
+
+   perl mameGenXml.pl -rompath /home/pi/fba/roms/ -mode fba -extension zip > gamelist.xml
+
+and finally an example for console:
+
+   perl mameGenXml.pl -rompath /home/pi/roms/nes/ -mode console -extension nes > gamelist.xml
+
+Now you just need to move the gamelist.xml into your roms directory. Note: THIS WILL OVERWRITE ANY EXISTING GAMELIST.XML, so if you already have one please back it up first:
+
+   mv gamelist.xml /home/pi/mame4all/roms
+
+Restart Emulation Station and enjoy!
+</pre></body></html>
